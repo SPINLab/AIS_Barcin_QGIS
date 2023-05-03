@@ -58,6 +58,8 @@ Once these libraries have been installed open a jupyter notebook by typing the f
 jupyter notebook
 ```
 
+# Data processing AIS Barcin -> Vector data
+
 Open a new notebook (right top New - python 3) and copy the following code in the first line. 
 
 ```python
@@ -72,7 +74,7 @@ from shapely.geometry import Point
 If there are no errors when running this script we are all set to run our script. 
 Keep the first cell and continue with the code below.
 
-## Step 1:  Setting the references to the folders 
+## Step 1:  Defining folder locations
 
 Add the following code in the next cell and run it. This will define the variables for the locations of the GIS files 
 ```python
@@ -81,14 +83,139 @@ org_GIS = input("Fill in path to GIS folder, eg C:\Dropbox\..\AIS_Barcin_Hoyuk\A
 loc_output = input("Fill in path where to create OUTPUT folder:, eg C:\Dropbox\..\AIS_Barcin_Hoyuk_DB_GIS\: ")
 #Create the output folder
 os.system('md ' + loc_output + 'OUTPUT')
-´´´
+```
+Once you run this cell you will be asked to fill in the location of the GIS folder containing the files.
 
-Now make sure to download this file 
+Next, download [Barcin_Hoyuk_GIS_QGIS.qgz](https://github.com/SPINLab/AIS_Barcin_QGIS/blob/main/Barcin_Hoyuk_GIS_QGIS.qgz) and store in the folder where you want the OUTPUT folder to be created. This file will be usefull to browse through your data in [QGIS](https://www.qgis.org/en/site/).
 
-## Step 2:  Setting the references to the folders
-Next wel are 
+## Step 2:  Add filename to all shapefiles
+```python
+#Step 2 add the filename of the original shapefile as a collumn so it is always clear where an object came from.
+#Create a list of all the shapefiles in the folder
+file_pattern = '**/*.shp'
+file_list = glob.glob(os.path.join(org_GIS, file_pattern), recursive=True)
+#Remove the TEMP layer from the list
+file_list = [f for f in file_list if '_TEMP' not in os.path.basename(f)]
+#Remove all the template files from the list
+file_list = [item for item in file_list if "RENAME" not in item]
+#Read the list and add the shapefile name
+for file in file_list:
+    # Open the shapefile with Geopandas
+    gdf = gpd.read_file(file)
+    # Get the filename of the shapefile without the extension
+    filename = os.path.splitext(os.path.basename(file))[0]
+
+    # Add a new column to the attribute table and populate it with the filename
+    gdf['shpname'] = (filename)
+    index_cols = [col for col in gdf.columns if 'index' in col]
+    if index_cols:
+        gdf = gdf.drop(index_cols, axis=1)
+    level_0_cols = [col for col in gdf.columns if 'level_0' in col]
+    if level_0_cols:
+        gdf = gdf.drop(level_0_cols, axis=1)
+    # Save the modified shapefile
+    gdf.to_file(file)
+```
+
+## Step 3: create a merged shapefile for locus layer
+
+Copy the following in the next cell and run.
+
+```python
+#Step 3 create the Locus layer
+#Put all the locus files from the various folders in a list 
+file_pattern = '**/*_locus.shp'
+file_list = glob.glob(os.path.join(org_GIS, file_pattern), recursive=True)
+
+#Remove the TEMP locus layer from the list
+file_list = [f for f in file_list if '_TEMP' not in os.path.basename(f)]
+#Remove all the template files from the list
+file_list = [item for item in file_list if "RENAME" not in item]
+
+#Merge all the locus files from the list
+#Read in each shapefile as a GeoDataFrame
+gdfs = [gpd.read_file(shapefile) for shapefile in file_list]
+
+#Concatenate the GeoDataFrames into one
+merged_gdf = pd.concat(gdfs, ignore_index=True)
+
+#Convert back to a GeoDataFrame
+merged_gdf = gpd.GeoDataFrame(merged_gdf, crs=gdfs[0].crs, geometry='geometry')
+
+#Save the merged shapefile
+merged_gdf.to_file(loc_output+'OUTPUT\\BH_locus.shp')
+shp_output = loc_output+'OUTPUT\\BH_locus.shp'
+```
+
+## Step 4 create joinfld
+
+Copy the following in the next cell and run it.
+
+```python
+#Step 4 Create the joinfld in the newly created locus file
+#Read in the shapefile as a geopandas GeoDataFrame
+gdf = gpd.read_file(shp_output)
+
+col1 = 'Trench'
+col2 = 'Locus'
+
+# Add the new field to the GeoDataFrame
+gdf['joinfld'] = gdf.apply(lambda row: row[col1] + '_' + str(int(row[col2])), axis=1)
+
+#Drop collumns
+gdf = gdf.drop(['index'], axis=1)
+
+# Write the updated GeoDataFrame to a new shapefile
+gdf.to_file(shp_output)
+```
 
 
+## Step 5 Create centroid point with labels of locus
+Copy the code below and run it. 
+```python
+#Step 5 Create centroid point with labels of locus
+# Define the paths to locus polygon shp polygon and the point shapefile to be created
+poly_path = loc_output+'OUTPUT\\BH_locus.shp'
+point_path = loc_output+'OUTPUT\\BH_locus_points.shp'
 
+# Open the polygon shapefile with Geopandas
+poly_gdf = gpd.read_file(poly_path)
+
+# Calculate the centroid of each polygon
+centroids = poly_gdf['geometry'].centroid
+
+# Create a new Geopandas GeoDataFrame with the centroids as points
+point_gdf = gpd.GeoDataFrame(poly_gdf.drop('geometry', axis=1), crs=poly_gdf.crs, geometry=centroids)
+
+# Save the new point shapefile
+point_gdf.to_file(point_path)
+```
+
+## Step 6 Create merged layers for all other files
+
+```python
+#Step 6 Create merged layers for all other files
+type_list = ['annotation','heights','height_differences','graphic','finds_samples','unclear_limits','underlying_level_lines','underlying_level_lines']
+
+for item in type_list:
+    file_pattern = '**/*_'+item+'.shp'
+    file_list2 = glob.glob(os.path.join(org_GIS, file_pattern), recursive=True)
+    file_list2 = [item for item in file_list2 if "RENAME" not in item]
+    # read in each shapefile as a GeoDataFrame    
+    gdfs = [gpd.read_file(shapefile).to_crs('EPSG:2320') for shapefile in file_list2]
+    merged_gdf = pd.concat(gdfs, ignore_index=True)
+    merged_gdf = gpd.GeoDataFrame(merged_gdf, crs=gdfs[0].crs, geometry='geometry')
+    merged_gdf.to_file(loc_output+'OUTPUT\\BH_'+item+'.shp')
+    file_list2 =[]
+    print(item)
+```
+
+Now go to the access database and export the locus table to the database folder and name it: 3_Locus.csv make sure to add the field names on the first row and select the ; as deliminator. 
+
+If everything went well please open the Barcin_Hoyuk_GIS_QGIS.qgz file you stored above. 
+
+In case you do not want to copy paste everything above you can also download the notebook directly [here](ais_notebook_03052023.ipynb)
+
+# Data processing AIS Barcin -> Raster data
 
 
