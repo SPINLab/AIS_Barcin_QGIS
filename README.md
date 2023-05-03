@@ -147,7 +147,7 @@ merged_gdf.to_file(loc_output+'OUTPUT\\BH_locus.shp')
 shp_output = loc_output+'OUTPUT\\BH_locus.shp'
 ```
 
-## Step 4 create joinfld
+## Step 4: create joinfld
 
 Copy the following in the next cell and run it.
 
@@ -170,7 +170,7 @@ gdf.to_file(shp_output)
 ```
 
 
-## Step 5 Create centroid point with labels of locus
+## Step 5: Create centroid point with labels of locus
 Copy the code below and run it. 
 ```python
 #Step 5 Create centroid point with labels of locus
@@ -191,7 +191,7 @@ point_gdf = gpd.GeoDataFrame(poly_gdf.drop('geometry', axis=1), crs=poly_gdf.crs
 point_gdf.to_file(point_path)
 ```
 
-## Step 6 Create merged layers for all other files
+## Step 6: Create merged layers for all other files
 
 ```python
 #Step 6 Create merged layers for all other files
@@ -210,7 +210,7 @@ for item in type_list:
     print(item)
 ```
 
-Now go to the access database and export the locus table to the database folder and name it: 3_Locus.csv make sure to add the field names on the first row and select the ; as deliminator. 
+Now go to the access database and export the locus table to the database folder and name it: DATABASE\3_Locus.csv make sure to add the field names on the first row and select the ; as deliminator. 
 
 If everything went well please open the Barcin_Hoyuk_GIS_QGIS.qgz file you stored above. 
 
