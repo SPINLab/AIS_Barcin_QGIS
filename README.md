@@ -220,7 +220,7 @@ In case you do not want to copy paste everything above you can also download the
 
 The script below is a fairly simple script that allows you to copy all files with a certain extension to a new folder without integrating the sub folders. 
 
-This script can also be run in the jupyter notebook. 
+This script can be downloaded [here]() or run in the jupyter notebook by copy pasting the code below. 
 
 ```python
 #This script allows you to copy all files with a certain extension to a new folder without integrating the sub folders
