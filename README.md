@@ -211,7 +211,7 @@ Now go to the access database and export the locus table to the database folder 
 
 If everything went well please open the Barcin_Hoyuk_GIS_QGIS.qgz file you stored above. 
 
-In case you do not want to copy paste everything above you can also download the notebook directly [here](ais_notebook_03052023.ipynb)
+In case you do not want to copy paste everything above you can also download the notebook directly [here](https://github.com/SPINLab/AIS_Barcin_QGIS/blob/main/ais_notebook_03052023.ipynb)
 
 # Data processing AIS Barcin -> Raster data
 
