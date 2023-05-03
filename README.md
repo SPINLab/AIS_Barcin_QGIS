@@ -192,7 +192,7 @@ point_gdf.to_file(point_path)
 
 ```python
 #Step 6 Create merged layers for all other files
-type_list = ['annotation','heights','height_differences','graphic','finds_samples','unclear_limits','underlying_level_lines','underlying_level_lines']
+type_list = ['annotation','heights','height_differences','graphic','finds_samples','unclear_limits','underlying_level_lines','underlying_level_polygons']
 
 for item in type_list:
     file_pattern = '**/*_'+item+'.shp'
