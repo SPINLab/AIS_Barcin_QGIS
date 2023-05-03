@@ -8,13 +8,10 @@ This repository contains a series of scripts that allows to process that data fo
 2. Download the Python 3 installer for Windows.
 3. Double-click the executable and install Python 3 using MOST of the default settings. The only exception is to check the Make Anaconda the default Python option.
 
-Once you installe anaconda, please open the terminal of Anaconda. This can be done by the windows command and type "cmd" you will see a
-
-To create a conda environment called dl_workshop with the required packages, open a terminal by pressing the windows button and type "Anaconda prompt".
+Once you installed anaconda, please open the terminal of Anaconda by pressing the windows button and type "Anaconda prompt".
 
 ### Creating the environment
-
-To create a conda environment called ais_barcin with the required packages, open a terminal and type the command:
+To make sure your python installation is not conflicting with anthing else we are going to creat a environment called ais_barcin and install the required libraries. Open a terminal and type the command:
 
 ```
 conda create --name ais_barcin python jupyter pandas
