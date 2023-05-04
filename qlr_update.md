@@ -1,4 +1,4 @@
-In order to create qlr files that have the data per layer seperated based on Trench and plan the following script has been created:
+In order to create qlr files that have the data per layer seperated based on Trench and Plan fields the following script has been created:
 
 ```python
 import geopandas as gpd
