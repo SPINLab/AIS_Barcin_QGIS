@@ -65,8 +65,8 @@ Keep the first cell and continue with the code below.
 Add the following code in the next cell and run it. This will define the variables for the locations of the GIS files 
 ```python
 #Define the variables for the locations of the GIS files
-org_GIS = input("Fill in path to GIS folder, eg C:\Dropbox\..\AIS_Barcin_Hoyuk\AIS\GIS\")
-loc_output = input("Fill in path where to create the OUTPUT folder:, eg C:\Dropbox\..\AIS_Barcin_Hoyuk_DB_GIS\")
+org_GIS = input("Fill in path to GIS folder, eg C:\Dropbox\..\AIS_Barcin_Hoyuk\AIS\GIS\ : ")
+loc_output = input("Fill in path where to create the OUTPUT folder:, eg C:\Dropbox\..\AIS_Barcin_Hoyuk_DB_GIS\ : ")
 #Create the output folder
 os.system('md ' + loc_output + 'OUTPUT')
 ```
