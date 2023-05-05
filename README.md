@@ -200,8 +200,6 @@ Now go to the access database and export the locus table to the database folder 
 
 If everything went well please open the Barcin_Hoyuk_GIS_QGIS.qgz file you stored above. 
 
-In case you do not want to copy paste everything above you can also download the notebook directly [here](https://github.com/SPINLab/AIS_Barcin_QGIS/blob/main/ais_notebook_03052023.ipynb)
-
 # Create QLR files
 
 In order to load seperate layers qlr files for every plan, the script below can be used. Based on the locus layer shpname seperate qlr files can be created. Before you do this make sure to have the [AAAA.qlr](AAAA.qlr) file store in a new folder QLR in your project folder. (e.g. C:\Barcin\QLR\AAAA.qlr)
