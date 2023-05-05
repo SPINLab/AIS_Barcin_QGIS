@@ -28,26 +28,13 @@ Installing Geopandas
 ```
 pip install geopandas
 ```
-Install shutil 
 
-```
-pip install shutil 
-```
-Install glob
-
-```
-pip install glob
-```
-Install os
-
-```
-pip install os
-```
 Install shapely
 
 ```
 pip install shapely
 ```
+The libraries shutil, os and glob are installed with the default version of python´s anaconda.
 
 Once these libraries have been installed open a jupyter notebook by typing the following in your terminal. (when you lateron want to open jupyter lab you need to open you termimal directly, make sure to activate ais_barcin and type jupyter notebook. 
 
