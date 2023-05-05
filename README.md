@@ -202,7 +202,7 @@ If everything went well please open the Barcin_Hoyuk_GIS_QGIS.qgz file you store
 
 # Create QLR files
 
-In order to load seperate layers qlr files for every plan, the script below can be used. Based on the locus layer shpname seperate qlr files can be created. Before you do this make sure to have the [AAAA.qlr](AAAA.qlr) file store in a new folder QLR in your project folder. (e.g. C:\Barcin\QLR\AAAA.qlr)
+In order to load seperate layers qlr files for every plan, the script below can be used. Based on the locus layer shpname seperate qlr files can be created. Before you do this make sure to have the [AAAA.qlr](https://github.com/SPINLab/AIS_Barcin_QGIS/blob/main/AAAA.qlr) file store in a new folder QLR in your project folder. (e.g. C:\Barcin\QLR\AAAA.qlr)
 
 ``` python
 import geopandas as gpd
